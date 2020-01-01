@@ -1,32 +1,7 @@
 <template>
   <div class="app-container">
     <div class="address-layout">
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <div class="out-border">
-            <div class="layout-title">后台项目</div>
-            <div class="color-main address-content">
-              <a href="https://github.com/macrozheng/mall">mall</a>
-            </div>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="out-border">
-            <div class="layout-title">前端项目</div>
-            <div class="color-main address-content">
-              <a href="https://github.com/macrozheng/mall-admin-web">mall-admin-web</a>
-            </div>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="out-border">
-            <div class="layout-title">学习教程</div>
-            <div class="color-main address-content">
-              <a href="https://github.com/macrozheng/mall-learning">mall-learning</a>
-            </div>
-          </div>
-        </el-col>
-      </el-row>
+      <h1>给琦总的项目演示</h1>
     </div>
     <div class="total-layout">
       <el-row :gutter="20">
@@ -52,22 +27,22 @@
           </div>
         </el-col>
         <!--<el-col :span="6">-->
-          <!--<div class="total-frame">-->
-            <!--<svg-icon icon-class="total-week" class="total-icon">-->
-            <!--</svg-icon>-->
-            <!--<div class="total-title">近7天销售总额</div>-->
-            <!--<div class="total-value">￥50000.00</div>-->
-          <!--</div>-->
+        <!--<div class="total-frame">-->
+        <!--<svg-icon icon-class="total-week" class="total-icon">-->
+        <!--</svg-icon>-->
+        <!--<div class="total-title">近7天销售总额</div>-->
+        <!--<div class="total-value">￥50000.00</div>-->
+        <!--</div>-->
         <!--</el-col>-->
       </el-row>
     </div>
-    <el-card class="mine-layout">
-      <div style="text-align: center">
-        <img width="150px" height="150px" src="http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/banner/qrcode_for_macrozheng_258.jpg">
-      </div>
-      <div style="text-align: center">mall全套学习教程连载中！</div>
-      <div style="text-align: center;margin-top: 5px"><span class="color-main">关注公号</span>，第一时间获取。</div>
-    </el-card>
+    <!--<el-card class="mine-layout">-->
+      <!--<div style="text-align: center">-->
+        <!--<img width="150px" height="150px" src="http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/banner/qrcode_for_macrozheng_258.jpg">-->
+      <!--</div>-->
+      <!--<div style="text-align: center">mall全套学习教程连载中！</div>-->
+      <!--<div style="text-align: center;margin-top: 5px"><span class="color-main">关注公号</span>，第一时间获取。</div>-->
+    <!--</el-card>-->
     <div class="un-handle-layout">
       <div class="layout-title">待处理事务</div>
       <div class="un-handle-content">
@@ -303,7 +278,7 @@
           xAxisType: 'time',
           area:true,
           axisSite: { right: ['orderAmount']},
-        labelMap: {'orderCount': '订单数量', 'orderAmount': '订单金额'}},
+          labelMap: {'orderCount': '订单数量', 'orderAmount': '订单金额'}},
         chartData: {
           columns: [],
           rows: []

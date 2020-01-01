@@ -66,20 +66,12 @@
 </template>
 
 <script>
-  import {isvalidUsername} from '@/utils/validate';
   import {setSupport,getSupport,setCookie,getCookie} from '@/utils/support';
   import login_center_bg from '@/assets/images/login_center_bg.png'
 
   export default {
     name: 'login',
     data() {
-      const validateUsername = (rule, value, callback) => {
-        if (!isvalidUsername(value)) {
-          callback(new Error('请输入正确的用户名'))
-        } else {
-          callback()
-        }
-      };
       const validatePass = (rule, value, callback) => {
         if (value.length < 3) {
           callback(new Error('密码不能小于3位'))
@@ -93,7 +85,6 @@
           password: '',
         },
         loginRules: {
-          username: [{required: true, trigger: 'blur', validator: validateUsername}],
           password: [{required: true, trigger: 'blur', validator: validatePass}]
         },
         loading: false,

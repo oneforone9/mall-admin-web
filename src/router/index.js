@@ -279,12 +279,12 @@ export const constantRouterMap = [
         component: () => import('@/views/sms/subject/index'),
         meta: {title: '专题推荐', icon: 'sms-subject'}
       },
-      {
-        path: 'advertise',
-        name: 'homeAdvertise',
-        component: () => import('@/views/sms/advertise/index'),
-        meta: {title: '广告列表', icon: 'sms-ad'}
-      },
+      // {
+      //   path: 'advertise',
+      //   name: 'homeAdvertise',
+      //   component: () => import('@/views/sms/advertise/index'),
+      //   meta: {title: '广告列表', icon: 'sms-ad'}
+      // },
       {
         path: 'addAdvertise',
         name: 'addHomeAdvertise',
@@ -298,6 +298,39 @@ export const constantRouterMap = [
         component: () => import('@/views/sms/advertise/update'),
         meta: {title: '编辑广告'},
         hidden:true
+      }
+    ]
+  },
+  {
+    path: '/ums',
+    component: Layout,
+    redirect: '/ums/admin',
+    name: 'ums',
+    meta: {title: '权限', icon: 'example'},
+    children: [
+      {
+        path: 'admin',
+        name: 'admin',
+        component: () => import('@/views/ums/admin/index'),
+        meta: {title: '用户管理', icon: 'user'}
+      },
+      {
+        path: 'adminPermission',
+        name: 'adminPermission',
+        component: () => import('@/views/ums/adminPermission/index'),
+        meta: {title: '用户权限', icon: 'user'}
+      },
+      {
+        path: 'role',
+        name: 'role',
+        component: () => import('@/views/ums/role/index'),
+        meta: {title: '角色管理', icon: 'user'}
+      },
+      {
+        path: 'rolePermission',
+        name: 'rolePermission',
+        component: () => import('@/views/ums/rolePermission/index'),
+        meta: {title: '角色权限', icon: 'user'}
       }
     ]
   },
