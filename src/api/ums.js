@@ -83,7 +83,7 @@ export function updateAdmin(id,data) {
 }
 export function deleteAdmin(id) {
   return request({
-    url:'/role/delete'+id,
+    url:'/admin/delete/'+id,
     method:'post'
   })
 }
