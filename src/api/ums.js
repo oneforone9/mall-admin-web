@@ -46,11 +46,18 @@ export function updatePermissionByUser(params) {
     params:params
   })
 }
-export function createRole(data) {
+// export function createRole(data) {
+//   return request({
+//     url:'/role/create',
+//     method:'post',
+//     data:data
+//   })
+// }
+export function createRole(params) {
   return request({
     url:'/role/create',
     method:'post',
-    data:data
+    params:params
   })
 }
 export function updateRole(data) {

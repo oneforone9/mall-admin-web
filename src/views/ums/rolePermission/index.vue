@@ -2,9 +2,13 @@
   <div class="app-container">
     <el-container>
       <el-header>
-        <el-button v-show="disabledAll" style="float: right;margin-top: 10px;" size="small" type="primary" @click="assign">分配</el-button>
-        <el-button v-show="!disabledAll" style="float: right;margin-top: 10px;" size="small" type="primary" @click="disabledAll = true">取消</el-button>
-        <el-button v-show="!disabledAll" style="float: right;margin-top: 10px;" size="small" type="primary" @click="save">保存</el-button>
+        <div style="float: right;">
+          <el-button v-show="disabledAll" size="small" type="primary" @click="add">新增</el-button>
+          <el-button v-show="disabledAll" size="small" type="primary" @click="edit">修改</el-button>
+          <el-button v-show="disabledAll"  size="small" type="danger" @click="delRole">删除</el-button>
+          <el-button v-show="!disabledAll" size="small" type="primary" @click="cancel">取消</el-button>
+          <el-button v-show="!disabledAll" size="small" type="primary" @click="save">保存</el-button>
+        </div>
       </el-header>
       <el-container>
         <el-aside width="40%">
@@ -15,10 +19,14 @@
                     @current-change="handleRoleChange">
             <el-table-column type="index" width="40"  align="center" />
             <el-table-column label="角色名称" width="180" align="center">
-              <template slot-scope="scope">{{scope.row.name}}</template>
+              <template slot-scope="scope">
+                  <el-input v-model="scope.row.name" :disabled="scope.row.disabled" class="edit-input" />
+              </template>
             </el-table-column>
             <el-table-column label="角色描述" width="180" align="center">
-              <template slot-scope="scope">{{scope.row.description}}</template>
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.description" :disabled="scope.row.disabled"  class="edit-input" />
+              </template>
             </el-table-column>
           </el-table>
         </el-aside>
@@ -38,13 +46,14 @@
   </div>
 </template>
 <script>
-  import {fetchRoles,fetchPermissions,fetchPermissonByRole,updatePermissionByRole} from '@/api/ums'
+  import {fetchRoles,fetchPermissions,fetchPermissonByRole,updatePermissionByRole,createRole,deleteRole} from '@/api/ums'
   const R = (f, s) => s.map(i => (f(i), i.children && i.children.length ? R(f, i.children) : 0, i))
   export default {
     name:'rolePermission',
     data() {
       return {
         currentRow:null,
+        currentNum:0,
         roles:[],
         permissions:[],
         rolePermissions:[],
@@ -54,6 +63,14 @@
           label: 'name'
         },
         listLoading:false,
+        rules: {
+          name: [
+            { required: true, message: '请输入角色名称', trigger: 'blur' },
+          ],
+          description: [
+            { required: true, message: '请输入角色描述', trigger: 'change' }
+          ]
+        }
       }
     },
     computed: {
@@ -88,7 +105,17 @@
         fetchRoles().then(response => {
           this.listLoading = false;
           this.roles = response.data;
+          this.chageTableDisable()
         });
+      },
+      chageTableDisable(){
+        this.roles.forEach((item,index)=>{
+          item.disabled = true
+          // if(!this.disabledAll && item.id == this.currentRow.id){
+          //   item.disabled = false
+          //   this.$set(this.roles,index,item)
+          // }
+        })
       },
       getPermissions(){
         this.listLoading=true;
@@ -97,9 +124,19 @@
           this.permissions = response.data
         });
       },
-      handleRoleChange(row){
+      handleRoleChange(row,oldRow){
+        if(!this.disabledAll && row.id!=oldRow.id){
+          // this.$message({
+          //   message: '请先保存当前的角色',
+          //   type: 'warning',
+          //   duration: 1000
+          // });
+          // this.$refs.singleTable.setCurrentRow(oldRow);
+          // return;
+        }
         this.getPermissonByRole(row.id)
         this.currentRow = row
+        // this.currentNum = index
       },
       getPermissonByRole(roleId){
         fetchPermissonByRole(roleId).then(response => {
@@ -111,23 +148,121 @@
           this.$refs.tree.setCheckedKeys(this.rolePermissions);
         });
       },
-      assign(){
+      add(){
         this.disabledAll = false
+        var child = {
+          name:'',
+          description:'',
+          disabled:false
+        }
+
+        this.roles=[]
+        this.roles.push(child)
+        this.currentRow = child
+        this.$refs.tree.setCheckedKeys([]);
       },
-      save(){
-        const selectKeys= this.$refs.tree.getCheckedKeys();
-        var data = new URLSearchParams();
-        data.append("roleId", this.currentRow.id);
-        data.append("permissionIds", selectKeys);
-        updatePermissionByRole(data).then(response =>{
+      edit(){
+        if(this.currentRow != null){
+          this.disabledAll = false
+          this.currentRow.disabled = true
+          this.roles = []
+          this.roles.push(this.currentRow)
+          this.currentRow.disabled = false
+          this.$set(this.roles,1,item)
+        }else{
           this.$message({
-            message: '保存成功',
-            type: 'success',
+            message: '请选择要操作的角色',
+            type: 'warning',
             duration: 1000
           });
-          this.$refs.tree.setCheckedKeys(selectKeys);
-          this.disabledAll = true
-        })
+          return;
+        }
+      },
+      cancel(){
+        this.disabledAll = true
+        this.getRoles()
+        // this.roles.forEach((item,index)=>{
+        //   if(item.id == this.currentRow.id){
+        //     item.disabled = true
+        //     this.$set(this.roles,index,item)
+        //   }
+        // })
+        // this.roles[this.currentRow-1].disabled=true
+      // else if(this.disabledAll && item.id == this.currentRow.id){
+      //     item.disabled = true
+      //     this.$set(this.roles,index,item)
+      //   }
+      },
+      delRole(){
+        if(this.currentRow != null){
+          this.$confirm('是否要删除该角色', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            let data = new URLSearchParams();
+            data.append("ids",this.currentRow.id);
+            deleteRole(data).then(response=>{
+              this.$message({
+                message: '删除成功',
+                type: 'success',
+                duration:1000
+              });
+              this.getRoles();
+            });
+          });
+        }else{
+          this.$message({
+            message: '请选择要操作的角色',
+            type: 'warning',
+            duration: 1000
+          });
+          return;
+        }
+      },
+      save(){
+        if(this.currentRow.name==null || this.currentRow.name==''){
+          this.$message({
+            message: '角色名称不能为空',
+            type: 'warning',
+            duration: 1000
+          });
+          return;
+        }
+        const selectKeys= this.$refs.tree.getCheckedKeys();
+        if(selectKeys==null || selectKeys.length==0){
+          this.$message({
+            message: '请选择权限',
+            type: 'warning',
+            duration: 1000
+          });
+          return
+        }
+        var data = new URLSearchParams();
+        data.append("role", JSON.stringify(this.currentRow));
+        data.append("permissionIds", selectKeys);
+        if(this.currentRow.id){
+          updatePermissionByRole(data).then(response =>{
+            this.$message({
+              message: '保存成功',
+              type: 'success',
+              duration: 1000
+            });
+            this.$refs.tree.setCheckedKeys(selectKeys);
+            this.disabledAll = true
+          })
+        }else{
+          createRole(data).then(response =>{
+            this.$message({
+              message: '保存成功',
+              type: 'success',
+              duration: 1000
+            });
+            this.$refs.tree.setCheckedKeys(selectKeys);
+            this.disabledAll = true
+          })
+        }
+        this.getRoles()
       }
     }
   }

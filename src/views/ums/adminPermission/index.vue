@@ -115,6 +115,14 @@
       },
       save(){
         const selectKeys= this.$refs.tree.getCheckedKeys();
+        if(selectKeys==null || selectKeys.length==0){
+          this.$message({
+            message: '请选择权限',
+            type: 'warning',
+            duration: 1000
+          });
+          return
+        }
         var data = new URLSearchParams();
         data.append("adminId", this.currentRow.id);
         data.append("permissionIds", selectKeys);

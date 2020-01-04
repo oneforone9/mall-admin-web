@@ -320,17 +320,17 @@ export const constantRouterMap = [
         component: () => import('@/views/ums/adminPermission/index'),
         meta: {title: '用户权限', icon: 'user'}
       },
-      {
-        path: 'role',
-        name: 'role',
-        component: () => import('@/views/ums/role/index'),
-        meta: {title: '角色管理', icon: 'user'}
-      },
+      // {
+      //   path: 'role',
+      //   name: 'role',
+      //   component: () => import('@/views/ums/role/index'),
+      //   meta: {title: '角色管理', icon: 'user'}
+      // },
       {
         path: 'rolePermission',
         name: 'rolePermission',
         component: () => import('@/views/ums/rolePermission/index'),
-        meta: {title: '角色权限', icon: 'user'}
+        meta: {title: '角色管理', icon: 'user'}
       }
     ]
   },
