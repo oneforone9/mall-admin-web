@@ -250,6 +250,7 @@
             });
             this.$refs.tree.setCheckedKeys(selectKeys);
             this.disabledAll = true
+            this.getRoles()
           })
         }else{
           createRole(data).then(response =>{
@@ -260,9 +261,9 @@
             });
             this.$refs.tree.setCheckedKeys(selectKeys);
             this.disabledAll = true
+            this.getRoles()
           })
         }
-        this.getRoles()
       }
     }
   }
